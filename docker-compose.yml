@@ -20,3 +20,7 @@ services:
       - fastapi
     env_file:
       - .env
+
+networks:
+  main_net:
+    driver: bridge
