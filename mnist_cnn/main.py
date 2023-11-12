@@ -17,6 +17,8 @@ origins = [
     "http://localhost:4173",
     "https://jitx.io/apps/mnist",
     "https://www.jitx.io/apps/mnist/",
+    "https://www.jitx.io",
+    "https://jitx.io",
 ]
 
 
