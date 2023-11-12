@@ -8,12 +8,16 @@ services:
       - "8004:8004"
     volumes:
       - ${FASTAPI_VOLUME}:/app/data
+    env_file:
+      - .env
 
   celery_worker:
     build: .
     command: poetry run python3 -m celery -A mnist_cnn.worker.celery worker --loglevel=INFO
     depends_on:
       - fastapi
+    env_file:
+      - .env
 
 networks:
   main_net:
