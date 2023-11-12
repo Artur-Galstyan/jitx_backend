@@ -15,13 +15,14 @@ from mnist_cnn.cnn.model.model import Model
 logger = logging.getLogger(__name__)
 load_dotenv()
 
-db_path = pathlib.Path(__name__).parent.absolute() / "results.db"
-CELERY_RESULT_BACKEND = f"db+sqlite:///{db_path}"
+# db_path = pathlib.Path(__name__).parent.absolute() / "results.db"
+CELERY_RESULT_BACKEND = os.environ.get("CELERY_RESULT_BACKEND")
 CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL")
 FASTAPI_URL = os.environ.get("FASTAPI_URL")
 
 assert CELERY_BROKER_URL is not None, "Celery broker URL not set"
 assert FASTAPI_URL is not None, "FastAPI URL not set"
+assert CELERY_RESULT_BACKEND is not None, "Celery result backend not set"
 
 
 celery = Celery(__name__, broker=CELERY_BROKER_URL, backend=CELERY_RESULT_BACKEND)
