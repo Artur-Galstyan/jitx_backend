@@ -6,6 +6,8 @@ services:
     command: poetry run start
     ports:
       - "8004:8004"
+    volumes:
+      - ${FASTAPI_VOLUME}:/app/data
 
   celery_worker:
     build: .
