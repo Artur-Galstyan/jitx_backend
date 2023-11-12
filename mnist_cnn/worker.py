@@ -47,9 +47,10 @@ def init_celery(**kwargs):
 @task_success.connect
 def task_success_handler(result, **kwargs):
     task_id = kwargs["sender"].request.id
-
+    logger.info(f"Task {task_id} succeeded; sending webhook")
     req = requests.post(
         f"{FASTAPI_URL}/predict/webhook",
+        headers={"Content-Type": "application/json"},
         json={"prediction": result, "task_id": task_id},
     )
     if req.status_code != 200:
@@ -66,7 +67,5 @@ def predict_number(array: list):
     if not model:
         raise Exception("Model not loaded")
     array = jnp.array(array, dtype=float).reshape(1, 28, 28)
-    # save in another thread
-
     prediction = jnp.argmax(model(array, key=None))
     return int(prediction)
