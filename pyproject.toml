@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "mnist_cnn"
+version = "0.1.0"
+description = ""
+authors = ["Artur A. Galstyan <galstyan.artu@gmail.com>"]
+readme = "README.md"
+
+
+[tool.poetry.dependencies]
+python = "^3.11"
+equinox = "^0.11.1"
+torch = "^2.1.0"
+torchvision = "^0.16.0"
+optax = "^0.1.7"
+icecream = "^2.1.3"
+fastapi = "^0.104.1"
+celery = "^5.3.5"
+uvicorn = {version = "^0.24.0", extras = ["standard"]}
+rabbitmq = "^0.2.0"
+sqlalchemy = "^2.0.23"
+python-dotenv = "^1.0.0"
+matplotlib = "^3.8.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
