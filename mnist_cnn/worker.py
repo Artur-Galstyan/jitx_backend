@@ -46,7 +46,6 @@ def init_celery(**kwargs):
 
 @task_success.connect
 def task_success_handler(result, **kwargs):
-    logger.info(type(kwargs["sender"]))
     task_id = kwargs["sender"].request.id
 
     req = requests.post(

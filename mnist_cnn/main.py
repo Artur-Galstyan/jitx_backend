@@ -67,14 +67,18 @@ async def get_prediction(task_id: str):
 
 @app.post("/predict/webhook")
 async def task_webhook(prediction_response: PredictionResponse):
-    task_result = celery.AsyncResult(prediction_response.task_id)
-    user_id = task_id_to_user_id[prediction_response.task_id]
-    await all_active_connections[user_id].send_text(
-        json.dumps({"type": "prediction", "prediction": task_result.get()})
-    )
-    # remove task id from dict
-    del task_id_to_user_id[prediction_response.task_id]
-    return task_result.status
+    try:
+        task_result = celery.AsyncResult(prediction_response.task_id)
+        user_id = task_id_to_user_id[prediction_response.task_id]
+        await all_active_connections[user_id].send_text(
+            json.dumps({"type": "prediction", "prediction": task_result.get()})
+        )
+        # remove task id from dict
+        del task_id_to_user_id[prediction_response.task_id]
+        return task_result.status
+    except Exception as e:
+        ic(e)
+        return "Error, " + str(e)
 
 
 middleware = CORSMiddleware(
