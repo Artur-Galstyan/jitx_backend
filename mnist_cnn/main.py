@@ -9,15 +9,24 @@ from starlette.middleware.cors import CORSMiddleware
 
 from mnist_cnn.worker import celery, predict_number
 
-app = FastAPI()
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],  # Allows all origins
+app = FastAPI()
+origins = [
+    "http://localhost:5173",
+    "http://localhost:5174",
+    "http://localhost:4173",
+    "https://jitx.io/apps/mnist",
+    "https://www.jitx.io/apps/mnist/",
+]
+
+middleware = CORSMiddleware(
+    app=app,
+    allow_origins=origins,
     allow_credentials=True,
-    allow_methods=["*"],  # Allows all methods
-    allow_headers=["*"],  # Allows all headers
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
+
 
 all_active_connections = {}
 task_id_to_user_id = {}
