@@ -89,4 +89,4 @@ async def task_webhook(prediction_response: PredictionResponse):
 
 
 def start():
-    uvicorn.run("mnist_cnn.main:app", port=8004, reload=True)
+    uvicorn.run("mnist_cnn.main:app", host="0.0.0.0", port=8004, reload=True)
