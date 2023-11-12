@@ -11,17 +11,13 @@ from mnist_cnn.worker import celery, predict_number
 
 app = FastAPI()
 
-# app.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=[
-#         "http://localhost:5173",
-#         "https://jitx.io/apps/mnist",
-#         "https://www.jitx.io/apps/mnist",
-#     ],
-#     allow_credentials=True,
-#     allow_methods=["*"],
-#     allow_headers=["*"],
-# )
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allows all origins
+    allow_credentials=True,
+    allow_methods=["*"],  # Allows all methods
+    allow_headers=["*"],  # Allows all headers
+)
 
 all_active_connections = {}
 task_id_to_user_id = {}
