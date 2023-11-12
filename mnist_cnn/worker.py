@@ -7,7 +7,7 @@ import jax.numpy as jnp
 import matplotlib
 import requests
 from celery import Celery
-from celery.signals import celeryd_init, task_success
+from celery.signals import celeryd_init, task_success, task_postrun
 from dotenv import load_dotenv
 
 from mnist_cnn.cnn.model.model import Model
@@ -15,7 +15,6 @@ from mnist_cnn.cnn.model.model import Model
 logger = logging.getLogger(__name__)
 load_dotenv()
 
-# db_path = pathlib.Path(__name__).parent.absolute() / "results.db"
 CELERY_RESULT_BACKEND = os.environ.get("CELERY_RESULT_BACKEND")
 CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL")
 FASTAPI_URL = os.environ.get("FASTAPI_URL")
@@ -32,27 +31,31 @@ model: Model | None = None
 
 @celeryd_init.connect
 def init_celery(**kwargs):
-    logger.info("Initializing celery...")
-    matplotlib.use("Agg")
-    logger.info("Loading model")
+    print("Initializing celery...")
+    print("Loading model")
     global model
     model_dir = pathlib.Path(__name__).parent.absolute() / "mnist_cnn/models/model.eqx"
     init_model = Model()
     try:
         model = eqx.tree_deserialise_leaves(model_dir, init_model)
     except Exception as e:
-        logger.error("Model loading failed", e)
-    logger.info("Model loaded")
+        print("Model loading failed", e)
+    print("Model loaded")
 
 
-@task_success.connect
-def task_success_handler(result, **kwargs):
-    task_id = kwargs["sender"].request.id
+# @task_postrun.connect
+def task_postrun_handler(
+    task_id,
+    task,
+    retval,
+    state,
+    **kwargs,
+):
     logger.info(f"Task {task_id} succeeded; sending webhook")
     req = requests.post(
         f"{FASTAPI_URL}/predict/webhook",
         headers={"Content-Type": "application/json"},
-        json={"prediction": result, "task_id": task_id},
+        json={"prediction": retval, "task_id": task_id},
     )
     if req.status_code != 200:
         logger.error(
