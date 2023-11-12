@@ -88,9 +88,5 @@ async def task_webhook(prediction_response: PredictionResponse):
     return task_result.status
 
 
-def main():
-    uvicorn.run("main:app", port=8004, reload=True)
-
-
-if __name__ == "__main__":
-    main()
+def start():
+    uvicorn.run("mnist_cnn.main:app", port=8004, reload=True)

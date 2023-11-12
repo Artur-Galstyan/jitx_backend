@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  fastapi:
+    build: .
+    command: poetry run start
+    ports:
+      - "8004:8004"
+
+  celery_worker:
+    build: .
+    command: poetry run python3 -m celery -A mnist_cnn.worker.celery worker --loglevel=INFO
+    depends_on:
+      - fastapi

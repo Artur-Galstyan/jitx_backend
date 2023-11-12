@@ -26,3 +26,5 @@ matplotlib = "^3.8.1"
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
+[tool.poetry.scripts]
+start = "mnist_cnn.main:start"
