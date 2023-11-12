@@ -14,3 +14,7 @@ services:
     command: poetry run python3 -m celery -A mnist_cnn.worker.celery worker --loglevel=INFO
     depends_on:
       - fastapi
+
+networks:
+  main_net:
+    driver: bridge
