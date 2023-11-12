@@ -43,7 +43,7 @@ def init_celery(**kwargs):
     print("Model loaded")
 
 
-# @task_postrun.connect
+@task_postrun.connect
 def task_postrun_handler(
     task_id,
     task,
