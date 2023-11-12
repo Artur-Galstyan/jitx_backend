@@ -10,6 +10,8 @@ services:
       - ${FASTAPI_VOLUME}:/app/data
     env_file:
       - .env
+    networks:
+      - main_net
 
   celery_worker:
     build: .
@@ -18,7 +20,3 @@ services:
       - fastapi
     env_file:
       - .env
-
-networks:
-  main_net:
-    driver: bridge
