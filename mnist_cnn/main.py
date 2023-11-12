@@ -19,14 +19,6 @@ origins = [
     "https://www.jitx.io/apps/mnist/",
 ]
 
-middleware = CORSMiddleware(
-    app=app,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
 
 all_active_connections = {}
 task_id_to_user_id = {}
@@ -75,7 +67,7 @@ async def make_prediction(prediction_request: PredictionRequest):
     return async_res.id
 
 
-@app.get("/predict/")
+@app.get("/predict/{task_id}")
 async def get_prediction(task_id: str):
     task_result = celery.AsyncResult(task_id)
     return task_result.status
@@ -91,6 +83,15 @@ async def task_webhook(prediction_response: PredictionResponse):
     # remove task id from dict
     del task_id_to_user_id[prediction_response.task_id]
     return task_result.status
+
+
+middleware = CORSMiddleware(
+    app=app,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 def start():
