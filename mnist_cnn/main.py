@@ -11,7 +11,7 @@ from mnist_cnn.worker import celery, predict_number
 
 
 app = FastAPI()
-
+app.celery_app = celery
 all_active_connections = {}
 task_id_to_user_id = {}
 
