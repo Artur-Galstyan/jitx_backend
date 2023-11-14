@@ -10,7 +10,7 @@ from celery import Celery
 from celery.signals import celeryd_init, task_success, task_postrun
 from dotenv import load_dotenv
 
-from mnist_cnn.cnn.model.model import Model
+from jitx_backend.cnn.model.model import Model
 
 logger = logging.getLogger(__name__)
 load_dotenv()
@@ -34,7 +34,9 @@ def init_celery(**kwargs):
     print("Initializing celery...")
     print("Loading model")
     global model
-    model_dir = pathlib.Path(__name__).parent.absolute() / "mnist_cnn/models/model.eqx"
+    model_dir = (
+        pathlib.Path(__name__).parent.absolute() / "jitx_backend/models/model.eqx"
+    )
     init_model = Model()
     try:
         model = eqx.tree_deserialise_leaves(model_dir, init_model)

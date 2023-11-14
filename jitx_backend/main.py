@@ -7,7 +7,7 @@ from icecream import ic
 from pydantic import BaseModel
 from starlette.middleware.cors import CORSMiddleware
 
-from mnist_cnn.worker import celery, predict_number
+from jitx_backend.worker import celery, predict_number
 
 
 app = FastAPI()
@@ -91,4 +91,4 @@ middleware = CORSMiddleware(
 
 
 def start():
-    uvicorn.run("mnist_cnn.main:app", host="0.0.0.0", port=8004, reload=False)
+    uvicorn.run("jitx_backend.main:app", host="0.0.0.0", port=8004, reload=False)
